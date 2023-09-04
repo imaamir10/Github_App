@@ -10,6 +10,7 @@ import com.example.githubapp.feature_github_user.domain.model.followers.Response
 import com.example.githubapp.feature_github_user.domain.model.repo.ResponseRepoList
 import com.example.githubapp.feature_github_user.domain.model.user.UserItem
 import com.example.githubapp.feature_github_user.data.remote.paging.UserPagingSource
+import com.example.githubapp.feature_github_user.domain.model.repo.RepoItem
 import com.example.githubapp.feature_github_user.domain.repository.GithubRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -25,10 +26,10 @@ class GithubRepositoryImpl(private val api: RetrofitApi) : GithubRepository {
         ).flow
     }
 
-    override suspend fun getRepoList(url :String): Flow<Resource<List<ResponseRepoList>>> = handleApiResponse(
+    override suspend fun getRepoList(url :String): Flow<Resource<List<RepoItem>>> = handleApiResponse(
         apiCall = { api.getRepoList(url) },
         convert = { responseItem ->
-            responseItem.map { it.toReponseRepoList() }
+            responseItem.map { it.toRepoItem() }
         }
     )
 

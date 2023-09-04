@@ -19,6 +19,8 @@
     <style name="NormalTextStyle">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/textcolor</item>
+        <item name="singleLine">true</item>
+        <item name="android:ellipsize">end</item>
 
     </style>
 </resources>

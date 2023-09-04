@@ -24,6 +24,6 @@ data class RepoItemDto(
     val url: String?= null
 ){
     fun toRepoItem() : RepoItem {
-        return RepoItem()
+        return RepoItem(id = id)
     }
 }

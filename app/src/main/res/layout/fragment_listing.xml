@@ -117,9 +117,9 @@
                 android:layout_height="wrap_content"
                 style="@style/PlaceHolderTextStyle"
                 android:text="@string/follower"
-                app:layout_constraintStart_toEndOf="@+id/ivUserImage"
+                app:layout_constraintStart_toStartOf="@+id/ivUserImage"
                 android:layout_marginStart="6dp"
-                app:layout_constraintTop_toBottomOf="@+id/tvUserNamePlaceholder"
+                app:layout_constraintTop_toBottomOf="@+id/ivUserImage"
                 />
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvFollower"
@@ -140,8 +140,7 @@
                 android:layout_height="wrap_content"
                 style="@style/PlaceHolderTextStyle"
                 android:text="@string/number_of_repository"
-                app:layout_constraintStart_toEndOf="@+id/ivUserImage"
-                android:layout_marginStart="6dp"
+                app:layout_constraintStart_toStartOf="@+id/tvFollowerPlaceholder"
                 app:layout_constraintTop_toBottomOf="@+id/tvFollowerPlaceholder"
                 />
             <androidx.appcompat.widget.AppCompatTextView

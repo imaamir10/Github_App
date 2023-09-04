@@ -2,9 +2,11 @@ package com.example.githubapp.feature_github_user.data.remote
 
 import com.example.githubapp.core.USER_ENDPOINT
 import com.example.githubapp.feature_github_user.data.remote.dto.followers.ResponseFollowersItemDto
+import com.example.githubapp.feature_github_user.data.remote.dto.repo.RepoItemDto
 import com.example.githubapp.feature_github_user.data.remote.dto.repo.ResponseRepoListDto
 import com.example.githubapp.feature_github_user.data.remote.dto.user.ResponseUserListDto
 import com.example.githubapp.feature_github_user.domain.model.followers.ResponseFollowersItem
+import com.example.githubapp.feature_github_user.domain.model.repo.RepoItem
 import com.example.githubapp.feature_github_user.domain.model.repo.ResponseRepoList
 import com.example.githubapp.feature_github_user.domain.model.user.ResponseUserList
 import retrofit2.Response
@@ -22,7 +24,7 @@ interface RetrofitApi {
     ): Response<ResponseUserListDto>
 
     @GET
-    suspend fun getRepoList(@Url dynamicEndpoint: String): Response<List<ResponseRepoListDto>>
+    suspend fun getRepoList(@Url dynamicEndpoint: String): Response<List<RepoItemDto>>
     @GET
     suspend fun getFollowerList(@Url dynamicEndpoint: String): Response<List<ResponseFollowersItemDto>>
 }

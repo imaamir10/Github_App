@@ -59,11 +59,11 @@ class UserListingViewModel @Inject constructor(
                 data.collect(){
                     _uiStateRepoList.value = UIState.Loading(false)
                     if(it is Resource.Success ){
-                        _uiStateRepoList.value = it.data?.items?.let { list->
+                        _uiStateRepoList.value = it.data?.let { list->
                             if (list.isNotEmpty())
                                 UIState.Success(list)
                             else
-                                UIState.Error("No Data found")
+                                UIState.Error("Have no repository yet !")
                         }?:UIState.Error("No Data found")
                     }
                 }
@@ -88,7 +88,7 @@ class UserListingViewModel @Inject constructor(
                             if (list.isNotEmpty())
                                 UIState.Success(list)
                             else
-                                UIState.Error("No Data found")
+                                UIState.Error("No followers yet !")
 
                         }?:UIState.Error("No Data found")
                     }

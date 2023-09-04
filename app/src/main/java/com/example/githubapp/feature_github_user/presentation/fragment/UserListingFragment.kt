@@ -85,7 +85,7 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
                     fragmentBinding?.tvRepos?.text = state.data.size.toString()
                 }
                 is UIState.Error -> {
-                    Toast.makeText(context,state.message,Toast.LENGTH_SHORT).show()
+                    fragmentBinding?.tvRepos?.text = state.message
                 }
             }
         }
@@ -101,7 +101,8 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
                     fragmentBinding?.tvFollower?.text = state.data.size.toString()
                 }
                 is UIState.Error -> {
-                    Toast.makeText(context,state.message,Toast.LENGTH_SHORT).show()
+                    fragmentBinding?.tvFollower?.text = state.message
+
                 }
             }
         }
