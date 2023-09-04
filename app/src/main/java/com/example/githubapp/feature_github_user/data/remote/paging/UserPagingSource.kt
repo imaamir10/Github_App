@@ -27,15 +27,6 @@ class UserPagingSource(private val api: RetrofitApi,private val query: String) :
     }
 
     override fun getRefreshKey(state: PagingState<Int, UserItem>): Int? {
-//        // If there are no items in the PagingState, return null
-//        if (state.isEmpty()) {
-//            return null
-//        }
-//
-//        // Get the key of the item at the start of the list (the first page)
-//        val firstItem = state.firstItemOrNull()
-//        return firstItem?. ?: 1
-
         return state.anchorPosition?.let {
             state.closestPageToPosition(it)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(it)?.nextKey?.minus(1)

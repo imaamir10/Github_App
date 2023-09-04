@@ -1,5 +1,7 @@
 package com.example.githubapp.feature_github_user.data.remote.dto.repo
 
+import com.example.githubapp.feature_github_user.domain.model.repo.RepoItem
+
 data class RepoItemDto(
     val avatar_url: String?= null,
     val events_url: String?= null,
@@ -20,4 +22,8 @@ data class RepoItemDto(
     val subscriptions_url: String?= null,
     val type: String?= null,
     val url: String?= null
-)
+){
+    fun toRepoItem() : RepoItem {
+        return RepoItem()
+    }
+}

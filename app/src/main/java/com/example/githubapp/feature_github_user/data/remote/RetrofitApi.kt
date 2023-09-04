@@ -22,6 +22,7 @@ interface RetrofitApi {
     ): Response<ResponseUserListDto>
 
     @GET
-    fun getRepoList(@Url dynamicEndpoint: String): Response<ResponseRepoListDto>
-    fun getFollowerList(@Url dynamicEndpoint: String): Response<List<ResponseFollowersItemDto>>
+    suspend fun getRepoList(@Url dynamicEndpoint: String): Response<List<ResponseRepoListDto>>
+    @GET
+    suspend fun getFollowerList(@Url dynamicEndpoint: String): Response<List<ResponseFollowersItemDto>>
 }

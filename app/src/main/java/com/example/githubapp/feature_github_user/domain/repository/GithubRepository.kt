@@ -10,6 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface GithubRepository {
     fun getPagingData(query: String): Flow<PagingData<UserItem>>
-    fun getRepoList(): Flow<Resource<ResponseRepoList>>
-    fun getFollowerList(): Flow<Resource<List<ResponseFollowersItem>>>
+    suspend fun getRepoList(url :String): Flow<Resource<ResponseRepoList>>
+    suspend fun getFollowerList(url: String): Flow<Resource<List<ResponseFollowersItem>>>
 }

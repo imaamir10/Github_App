@@ -7,10 +7,18 @@
         <item name="colorAccent">@color/blue</item>
     </style>
 
-    <style name="SearchAutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textColorHint">@color/grey</item>
-    </style>
+
 
     <style name="Theme.GithubApp" parent="Base.Theme.GithubApp" />
+
+    <style name="PlaceHolderTextStyle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/textplaceholdercolor</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="NormalTextStyle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/textcolor</item>
+
+    </style>
 </resources>

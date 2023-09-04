@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 inline fun <reified T : Any, R : Any> handleApiResponse(
-    crossinline apiCall: () -> Response<T>,
+    crossinline apiCall: suspend() -> Response<T>,
     crossinline convert: (T) -> R?
 ): Flow<Resource<R>> {
     return flow {
@@ -32,10 +32,12 @@ inline fun <reified T : Any, R : Any> handleApiResponse(
                 ))
             }
         } catch (e: HttpException) {
+            e.printStackTrace()
             emit(Resource.Error(
                 message = "Oops, something went wrong!"
             ))
         } catch (e: IOException) {
+            e.printStackTrace()
             emit(Resource.Error(
                 message = "Couldn't reach the server, check your internet connection."
             ))

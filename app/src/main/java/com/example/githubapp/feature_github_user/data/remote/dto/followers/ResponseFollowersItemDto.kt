@@ -23,8 +23,6 @@ data class ResponseFollowersItemDto(
     val url: String?= null
 ){
     fun toResponseFollowersItem() : ResponseFollowersItem {
-        return ResponseFollowersItem(
-            id = id
-        )
+        return ResponseFollowersItem()
     }
 }
