@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.githubapp.core.Resource
 import com.example.githubapp.core.UIState
 import com.example.githubapp.feature_github_user.domain.model.followers.ResponseFollowersItem
@@ -38,7 +39,7 @@ class UserListingViewModel @Inject constructor(
             _uiStateUserList.value = UIState.Loading(true)
             viewModelScope.launch {
                 try {
-                    val data = useCaseUserList(query)
+                    val data = useCaseUserList(query).cachedIn(viewModelScope)
                     data.collect(){
                         _uiStateUserList.value = UIState.Loading(false)
                         _uiStateUserList.value = UIState.Success(it)
