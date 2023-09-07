@@ -8,8 +8,8 @@ import com.example.githubapp.feature_github_user.domain.model.user.UserItem
 class UserPagingSource(private val api: RetrofitApi,private val query: String) : PagingSource<Int, UserItem>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserItem> {
         try {
-            // Load data from the API based on the params (page number, etc.)
-            val page = params.key ?: 1 // Default to page 1 if key is null
+
+            val page = params.key ?: 1
             val response = api.getGetUser(page, params.loadSize,query)
             
             if (response.isSuccessful) {

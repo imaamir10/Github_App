@@ -1,4 +1,4 @@
-package com.example.githubapp.feature_github_user.presentation.fragment
+package com.example.githubapp.feature_github_user.presentation.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +13,7 @@ import com.example.githubapp.core.UIState
 import com.example.githubapp.core.hideKeyboard
 import com.example.githubapp.databinding.FragmentListingBinding
 import com.example.githubapp.feature_github_user.domain.model.user.UserItem
-import com.example.githubapp.feature_github_user.presentation.adapter.UserAdapter
+import com.example.githubapp.feature_github_user.presentation.ui.adapter.UserAdapter
 import com.example.githubapp.feature_github_user.presentation.callback.OnUserItemClickListener
 import com.example.githubapp.feature_github_user.presentation.vm.UserListingViewModel
 import dagger.hilt.android.AndroidEntryPoint

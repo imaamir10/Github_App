@@ -14,9 +14,9 @@ import com.example.githubapp.feature_github_user.domain.repository.GithubReposit
 import com.example.githubapp.feature_github_user.domain.usecase.GetFollowersUseCase
 import com.example.githubapp.feature_github_user.domain.usecase.GetRepoUseCase
 import com.example.githubapp.feature_github_user.domain.usecase.GetUserListUseCase
-import com.example.githubapp.feature_github_user.presentation.adapter.UserAdapter
+import com.example.githubapp.feature_github_user.presentation.ui.adapter.UserAdapter
 import com.example.githubapp.feature_github_user.presentation.callback.OnUserItemClickListener
-import com.example.githubapp.feature_github_user.presentation.fragment.UserListingFragment
+import com.example.githubapp.feature_github_user.presentation.ui.fragment.UserListingFragment
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listingFragment"
-        android:name="com.example.githubapp.feature_github_user.presentation.fragment.UserListingFragment"
+        android:name="com.example.githubapp.feature_github_user.presentation.ui.fragment.UserListingFragment"
         android:label="fragment_listing"
         tools:layout="@layout/fragment_listing" />
 </navigation>
