@@ -45,7 +45,6 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
         setRepoDataObserver()
         onQueryEntered()
 
-//        listingViewModel.fetchFollowersData("https://api.github.com/users/aamirWasi/followers")
 
     }
 
@@ -131,6 +130,23 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
         userItem.repos_url?.let { listingViewModel.fetchRepoData(it) }
 
     }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentBinding = null
+    }
+
+    /*
+    * Memory Leak: Address the issue of fragmentBinding not being cleared to prevent potential memory leaks.
+    * to solve this
+    * this code is added
+    * override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentBinding = null
+    }
+    * */
+
 
 
 
