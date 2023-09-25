@@ -5,8 +5,13 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import com.bumptech.glide.RequestManager
 import com.example.githubapp.R
 import com.example.githubapp.core.UIState
@@ -17,6 +22,8 @@ import com.example.githubapp.feature_github_user.presentation.ui.adapter.UserAda
 import com.example.githubapp.feature_github_user.presentation.callback.OnUserItemClickListener
 import com.example.githubapp.feature_github_user.presentation.vm.UserListingViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -60,16 +67,29 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
     private fun setAdapter() {
         userAdapter.setOnItemClickListener(this)
         fragmentBinding?.rvUser?.adapter = userAdapter
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userAdapter.loadStateFlow.collect {
+                    fragmentBinding?.progressBar?.isVisible = it.source.append is LoadState.Loading
+
+
+                    fragmentBinding?.tvEmptyViewError?.isVisible = it.source.refresh is LoadState.NotLoading && it.append.endOfPaginationReached && userAdapter.itemCount < 1
+                }
+                userAdapter.addLoadStateListener {
+
+                }
+            }
+        }
     }
 
     private fun setFetchUserDataObserver() {
         listingViewModel.combinedUserData.observe(viewLifecycleOwner) { combinedUserData ->
             when (combinedUserData.userState) {
                 is UIState.Loading -> {
-                    fragmentBinding?.progressBar?.visibility = if (combinedUserData.userState.isLoading) View.VISIBLE else View.INVISIBLE
+                    fragmentBinding?.progressBar?.isVisible = combinedUserData.userState.isLoading
                 }
                 is UIState.Success -> {
-                    Log.e("userData","listData : "+combinedUserData.userState.data.toString())
                     userAdapter.submitData(lifecycle, combinedUserData.userState.data)
                 }
                 is UIState.Error -> {
@@ -85,7 +105,6 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
                     fragmentBinding?.tvRepos?.text =  "Getting Data..."
                 }
                 is UIState.Success -> {
-                    Log.e("userData","repodata : "+combinedUserData.repoState.data.size.toString())
                     fragmentBinding?.tvRepos?.text = combinedUserData.repoState.data.size.toString()
                 }
                 is UIState.Error -> {
@@ -101,7 +120,6 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
                     fragmentBinding?.tvFollower?.text =  "Getting Data..."
                 }
                 is UIState.Success -> {
-                    Log.e("userData","followersdata : "+combinedUserData.followerState.data.size.toString())
                     fragmentBinding?.tvFollower?.text = combinedUserData.followerState.data.size.toString()
                 }
                 is UIState.Error -> {
