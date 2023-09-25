@@ -16,6 +16,7 @@ import com.example.githubapp.feature_github_user.domain.usecase.GetFollowersUseC
 import com.example.githubapp.feature_github_user.domain.usecase.GetRepoUseCase
 import com.example.githubapp.feature_github_user.domain.usecase.GetUserListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -112,6 +113,15 @@ class UserListingViewModel @Inject constructor(
             }
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel() /*feedback */
+    }
+
+    /*
+    * Coroutine Management: Implement proper coroutine management to prevent coroutine leaks and ensure efficient resource usage.
+    * */
 }
 data class CombinedUserData(
     val userState: UIState<PagingData<UserItem>> ?= null,
