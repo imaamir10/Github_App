@@ -58,6 +58,7 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
                     fragmentBinding?.progressBar?.visibility = if (combinedUserData.userState.isLoading) View.VISIBLE else View.INVISIBLE
                 }
                 is UIState.Success -> {
+                    Log.e("userData","listData : "+combinedUserData.userState.data.toString())
                     userAdapter.submitData(lifecycle, combinedUserData.userState.data)
                 }
                 is UIState.Error -> {
@@ -73,7 +74,7 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
                     fragmentBinding?.tvRepos?.text =  "Getting Data..."
                 }
                 is UIState.Success -> {
-                    Log.e("repoData",combinedUserData.repoState.data.size.toString())
+                    Log.e("userData","repodata : "+combinedUserData.repoState.data.size.toString())
                     fragmentBinding?.tvRepos?.text = combinedUserData.repoState.data.size.toString()
                 }
                 is UIState.Error -> {
@@ -89,6 +90,7 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
                     fragmentBinding?.tvFollower?.text =  "Getting Data..."
                 }
                 is UIState.Success -> {
+                    Log.e("userData","followersdata : "+combinedUserData.followerState.data.size.toString())
                     fragmentBinding?.tvFollower?.text = combinedUserData.followerState.data.size.toString()
                 }
                 is UIState.Error -> {
