@@ -1,6 +1,7 @@
 package com.example.githubapp.feature_github_user.presentation.vm
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,13 +27,24 @@ class UserListingViewModel @Inject constructor(
 ) :ViewModel(){
 
     private val _uiStateUserList = MutableLiveData<UIState<PagingData<UserItem>>>()
-    val uiStateUserList: LiveData<UIState<PagingData<UserItem>>> = _uiStateUserList
-
     private val _uiStateRepoList = MutableLiveData<UIState<List<RepoItem>>>()
-    val uiStateRepoList: LiveData<UIState<List<RepoItem>>> = _uiStateRepoList
-
     private val _uiStateFollowerList = MutableLiveData<UIState<List<ResponseFollowersItem>>>()
-    val uiStateFollowerList: LiveData<UIState<List<ResponseFollowersItem>>> = _uiStateFollowerList
+
+    val combinedUserData = MediatorLiveData<CombinedUserData>()
+
+    init {
+
+        combinedUserData.addSource(_uiStateUserList) { userState ->
+            combinedUserData.value = CombinedUserData(userState, null, null)
+        }
+        combinedUserData.addSource(_uiStateRepoList) { repoState ->
+            combinedUserData.value = CombinedUserData(null, repoState, null)
+        }
+        combinedUserData.addSource(_uiStateFollowerList) { followerState ->
+            combinedUserData.value = CombinedUserData(null, null, followerState)
+        }
+    }
+
     fun fetchPagingData(query: String) {
         if (query.isNotEmpty()) {
             // Show loading state
@@ -100,5 +112,9 @@ class UserListingViewModel @Inject constructor(
             }
         }
     }
-
 }
+data class CombinedUserData(
+    val userState: UIState<PagingData<UserItem>> ?= null,
+    val repoState: UIState<List<RepoItem>> ?= null,
+    val followerState: UIState<List<ResponseFollowersItem>> ?= null
+)

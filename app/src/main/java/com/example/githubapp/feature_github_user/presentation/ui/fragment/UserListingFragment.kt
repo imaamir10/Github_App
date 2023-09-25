@@ -41,8 +41,6 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
         fragmentBinding = binding
         setAdapter()
         setFetchUserDataObserver()
-        setFollowersDataObserver()
-        setRepoDataObserver()
         onQueryEntered()
 
 
@@ -54,53 +52,49 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
     }
 
     private fun setFetchUserDataObserver() {
-        listingViewModel.uiStateUserList.observe(viewLifecycleOwner){ state->
-            when (state) {
+        listingViewModel.combinedUserData.observe(viewLifecycleOwner) { combinedUserData ->
+            when (combinedUserData.userState) {
                 is UIState.Loading -> {
-                    // Show loading indicator
-                    Log.e("state", "Loading = ${state.isLoading}")
-                    fragmentBinding?.progressBar?.visibility = if(state.isLoading) View.VISIBLE else View.INVISIBLE
+                    fragmentBinding?.progressBar?.visibility = if (combinedUserData.userState.isLoading) View.VISIBLE else View.INVISIBLE
                 }
                 is UIState.Success -> {
-                    // Update the RecyclerView with the loaded data
-                    userAdapter.submitData(lifecycle, state.data)
-
+                    userAdapter.submitData(lifecycle, combinedUserData.userState.data)
                 }
                 is UIState.Error -> {
-                    // Show error message
-                    Toast.makeText(context,state.message,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,combinedUserData.userState.message,Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+
                 }
             }
-        }
-    }
 
-    private fun setRepoDataObserver() {
-        listingViewModel.uiStateRepoList.observe(viewLifecycleOwner){ state->
-            when(state){
-                is UIState.Loading->{
-                    fragmentBinding?.tvRepos?.text = "Getting Data..."
+            when (combinedUserData.repoState) {
+                is UIState.Loading -> {
+                    fragmentBinding?.tvRepos?.text =  "Getting Data..."
                 }
-                is UIState.Success->{
-                    fragmentBinding?.tvRepos?.text = state.data.size.toString()
+                is UIState.Success -> {
+                    Log.e("repoData",combinedUserData.repoState.data.size.toString())
+                    fragmentBinding?.tvRepos?.text = combinedUserData.repoState.data.size.toString()
                 }
                 is UIState.Error -> {
-                    fragmentBinding?.tvRepos?.text = state.message
+                    fragmentBinding?.tvRepos?.text = combinedUserData.repoState.message
+                }
+                else -> {
+
                 }
             }
-        }
-    }
 
-    private fun setFollowersDataObserver() {
-        listingViewModel.uiStateFollowerList.observe(viewLifecycleOwner){ state->
-            when(state){
-                is UIState.Loading->{
-                    fragmentBinding?.tvFollower?.text = "Getting Data..."
+            when (combinedUserData.followerState) {
+                is UIState.Loading -> {
+                    fragmentBinding?.tvFollower?.text =  "Getting Data..."
                 }
-                is UIState.Success->{
-                    fragmentBinding?.tvFollower?.text = state.data.size.toString()
+                is UIState.Success -> {
+                    fragmentBinding?.tvFollower?.text = combinedUserData.followerState.data.size.toString()
                 }
                 is UIState.Error -> {
-                    fragmentBinding?.tvFollower?.text = state.message
+                    fragmentBinding?.tvFollower?.text = combinedUserData.followerState.message
+                }
+                else -> {
 
                 }
             }
