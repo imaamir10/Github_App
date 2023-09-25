@@ -39,11 +39,22 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentListingBinding.bind(view)
         fragmentBinding = binding
+        setSavedData()
         setAdapter()
         setFetchUserDataObserver()
         onQueryEntered()
 
 
+    }
+
+    private fun setSavedData() {
+        val userItem: UserItem? = listingViewModel.getUserItem()
+        userItem?.apply {
+            fragmentBinding?.tvUserName?.text = login
+            fragmentBinding?.ivUserImage?.let {
+                glide.load(avatar_url).into(it)
+            }
+        }
     }
 
     private fun setAdapter() {
@@ -118,6 +129,7 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
     }
 
     override fun onUserItemClicked(userItem: UserItem) {
+        listingViewModel.setUserItem(userItem)
         fragmentBinding?.tvUserName?.text = userItem.login
         fragmentBinding?.ivUserImage?.let {
             glide.load(userItem.avatar_url).into(it)

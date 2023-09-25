@@ -32,19 +32,38 @@ class UserListingViewModel @Inject constructor(
     private val _uiStateFollowerList = MutableLiveData<UIState<List<ResponseFollowersItem>>>()
 
     val combinedUserData = MediatorLiveData<CombinedUserData>()
+    private var userItem: UserItem? = null
 
+    fun setUserItem(userItem: UserItem) {
+        this.userItem = userItem
+    }
+
+    fun getUserItem(): UserItem? {
+        return userItem
+    }
     init {
 
         combinedUserData.addSource(_uiStateUserList) { userState ->
-            combinedUserData.value = CombinedUserData(userState, null, null)
+            combinedUserData.value = CombinedUserData(userState, _uiStateRepoList.value, _uiStateFollowerList.value)
+//            combinedUserData.value = CombinedUserData(userState, null, null)
         }
         combinedUserData.addSource(_uiStateRepoList) { repoState ->
-            combinedUserData.value = CombinedUserData(null, repoState, null)
+            combinedUserData.value = CombinedUserData(_uiStateUserList.value, repoState, _uiStateFollowerList.value)
+//            combinedUserData.value = CombinedUserData(null, repoState, null)
         }
         combinedUserData.addSource(_uiStateFollowerList) { followerState ->
-            combinedUserData.value = CombinedUserData(null, null, followerState)
+            combinedUserData.value = CombinedUserData(_uiStateUserList.value, _uiStateRepoList.value, followerState)
+//            combinedUserData.value = CombinedUserData(null, null, followerState)
         }
     }
+
+    /* TODO --- MUST DO WHEN HAVE TIME ----
+    * Todo in above code CombinedUserData(userState, _uiStateRepoList.value, _uiStateFollowerList.value) in this line
+    *  when a new value for userState fetched updated the other values in the constructor also gets updated as previous values
+    *  ** CombinedUserData(userState, _uiStateRepoList.value, _uiStateFollowerList.value) this lines make the data survive the all three data
+    *  in configuration change
+    *  ** CombinedUserData(userState, null, null) while in this case one data value when the configuration changes happens
+    * */
 
     fun fetchPagingData(query: String) {
         if (query.isNotEmpty()) {
@@ -126,5 +145,5 @@ class UserListingViewModel @Inject constructor(
 data class CombinedUserData(
     val userState: UIState<PagingData<UserItem>> ?= null,
     val repoState: UIState<List<RepoItem>> ?= null,
-    val followerState: UIState<List<ResponseFollowersItem>> ?= null
+    val followerState: UIState<List<ResponseFollowersItem>> ?= null,
 )
