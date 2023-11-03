@@ -1,6 +1,7 @@
 package com.example.githubapp.feature_github_user.presentation.vm
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,7 @@ import com.example.githubapp.feature_github_user.domain.usecase.GetFollowersUseC
 import com.example.githubapp.feature_github_user.domain.usecase.GetRepoUseCase
 import com.example.githubapp.feature_github_user.domain.usecase.GetUserListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,13 +28,43 @@ class UserListingViewModel @Inject constructor(
 ) :ViewModel(){
 
     private val _uiStateUserList = MutableLiveData<UIState<PagingData<UserItem>>>()
-    val uiStateUserList: LiveData<UIState<PagingData<UserItem>>> = _uiStateUserList
-
     private val _uiStateRepoList = MutableLiveData<UIState<List<RepoItem>>>()
-    val uiStateRepoList: LiveData<UIState<List<RepoItem>>> = _uiStateRepoList
-
     private val _uiStateFollowerList = MutableLiveData<UIState<List<ResponseFollowersItem>>>()
-    val uiStateFollowerList: LiveData<UIState<List<ResponseFollowersItem>>> = _uiStateFollowerList
+
+    val combinedUserData = MediatorLiveData<CombinedUserData>()
+    private var userItem: UserItem? = null
+
+    fun setUserItem(userItem: UserItem) {
+        this.userItem = userItem
+    }
+
+    fun getUserItem(): UserItem? {
+        return userItem
+    }
+    init {
+
+        combinedUserData.addSource(_uiStateUserList) { userState ->
+            combinedUserData.value = CombinedUserData(userState, _uiStateRepoList.value, _uiStateFollowerList.value)
+//            combinedUserData.value = CombinedUserData(userState, null, null)
+        }
+        combinedUserData.addSource(_uiStateRepoList) { repoState ->
+            combinedUserData.value = CombinedUserData(_uiStateUserList.value, repoState, _uiStateFollowerList.value)
+//            combinedUserData.value = CombinedUserData(null, repoState, null)
+        }
+        combinedUserData.addSource(_uiStateFollowerList) { followerState ->
+            combinedUserData.value = CombinedUserData(_uiStateUserList.value, _uiStateRepoList.value, followerState)
+//            combinedUserData.value = CombinedUserData(null, null, followerState)
+        }
+    }
+
+    /* TODO --- MUST DO WHEN HAVE TIME ----
+    * Todo in above code CombinedUserData(userState, _uiStateRepoList.value, _uiStateFollowerList.value) in this line
+    *  when a new value for userState fetched updated the other values in the constructor also gets updated as previous values
+    *  ** CombinedUserData(userState, _uiStateRepoList.value, _uiStateFollowerList.value) this lines make the data survive the all three data
+    *  in configuration change
+    *  ** CombinedUserData(userState, null, null) while in this case one data value when the configuration changes happens
+    * */
+
     fun fetchPagingData(query: String) {
         if (query.isNotEmpty()) {
             // Show loading state
@@ -101,4 +133,17 @@ class UserListingViewModel @Inject constructor(
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel() /*feedback */
+    }
+
+    /*
+    * Coroutine Management: Implement proper coroutine management to prevent coroutine leaks and ensure efficient resource usage.
+    * */
 }
+data class CombinedUserData(
+    val userState: UIState<PagingData<UserItem>> ?= null,
+    val repoState: UIState<List<RepoItem>> ?= null,
+    val followerState: UIState<List<ResponseFollowersItem>> ?= null,
+)

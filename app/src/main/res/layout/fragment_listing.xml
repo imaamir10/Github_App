@@ -48,6 +48,18 @@
         android:layout_marginBottom="8dp"
         />
 
+    <TextView
+        android:id="@+id/tvEmptyViewError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_view_error"
+        app:layout_constraintTop_toTopOf="@+id/rvUser"
+        app:layout_constraintBottom_toBottomOf="@+id/rvUser"
+        app:layout_constraintStart_toStartOf="@+id/rvUser"
+        app:layout_constraintEnd_toEndOf="@+id/rvUser"
+        android:visibility="gone"
+        />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/barrier"
         android:layout_width="wrap_content"
