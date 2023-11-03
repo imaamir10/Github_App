@@ -50,8 +50,6 @@ class UserListingFragment : Fragment(R.layout.fragment_listing), OnUserItemClick
         setAdapter()
         setFetchUserDataObserver()
         onQueryEntered()
-
-
     }
 
     private fun setSavedData() {
