@@ -1,6 +1,6 @@
 # Github User Searching App
 
-- Archtecture pattern :- Mvvm with clean architecture
+- Its a Demo app with Mvvm with clean architecture
 
 ## Features
 
